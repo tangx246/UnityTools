@@ -12,6 +12,8 @@
 
 # Don't pull in packages for Unity Editor for this UPM package
 /[Pp]ackages/
+/[Pp]roject[Ss]ettings/
+/*.meta
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
