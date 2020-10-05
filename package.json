@@ -1,0 +1,11 @@
+{
+  "name": "com.tangx246.unitytools",
+  "version": "0.0.1",
+  "displayName": "Unity Tools",
+  "description": "A collection of various useful tools for Unity",
+  "author": {
+    "name": "tangx246",
+    "email": "tangx246@umn.edu",
+    "url": "https://github.com/tangx246"
+  }
+}
