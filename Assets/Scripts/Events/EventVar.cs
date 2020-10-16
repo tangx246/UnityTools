@@ -22,5 +22,11 @@ namespace UnityTools
         {
             return value;
         }
+
+        public void GetAndListen(UnityAction<T> action) 
+        {
+            valueChangedEvent.AddListener(action);
+            valueChangedEvent.Invoke(value);
+        }
     }
 }
