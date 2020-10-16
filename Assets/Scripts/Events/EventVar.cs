@@ -23,10 +23,13 @@ namespace UnityTools
             return value;
         }
 
+        /**
+         * Adds a listener and trigger the listener with the current value of the EventVar
+         */
         public void GetAndListen(UnityAction<T> action) 
         {
             valueChangedEvent.AddListener(action);
-            valueChangedEvent.Invoke(value);
+            action(value);
         }
     }
 }
