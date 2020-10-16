@@ -7,6 +7,11 @@ namespace UnityTools
         public readonly UnityEvent<T> valueChangedEvent = new UnityEvent<T>();
         private T value;
 
+        public EventVar(T initialValue) 
+        {
+            value = initialValue;
+        }
+
         public void Set(T value)
         {
             this.value = value;
