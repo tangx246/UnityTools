@@ -45,7 +45,7 @@ namespace UnityTools
             {
                 while (prefabsToInstantiate > 0)
                 {
-                    var instantiated = Instantiate(prefab);
+                    var instantiated = Instantiate(prefab, transform);
                     instantiated.SetActive(false);
                     instantiatedObjects.Enqueue(instantiated);
 
@@ -117,6 +117,7 @@ namespace UnityTools
             if (!prefabToPools.ContainsKey(prefab))
             {
                 var poolObject = new GameObject(typeof(GameObjectPool).Name);
+                poolObject.transform.parent = instance.transform;
                 var poolComponent = poolObject.AddComponent<GameObjectPool>();
                 poolComponent.prefab = prefab;
                 prefabToPools.Add(prefab, poolComponent);
