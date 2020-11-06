@@ -20,11 +20,74 @@ namespace UnityTools
             } }
         public List<GameObject> initialPrefabs;
 
-        private Dictionary<GameObject, Queue<GameObject>> prefabToInstantiatedObjects = new Dictionary<GameObject, Queue<GameObject>>();
-        private Queue<GameObject> prefabsToInstantiate = new Queue<GameObject>(); // Inefficient. Could use a counter for each prefab instead. Observe and update if necessary
-        private Coroutine instantiatorCoroutine;
-
         private const int CHUNK_SIZE = 100;
+        private class GameObjectPool : MonoBehaviour
+        {
+            public GameObject prefab;
+            private Queue<GameObject> instantiatedObjects = new Queue<GameObject>();
+            private int prefabsToInstantiate = CHUNK_SIZE;
+            private Coroutine instantiatorCoroutine;
+
+            public void Start()
+            {
+                StartInstantiator();
+            }
+
+            private void StartInstantiator()
+            {
+                if (instantiatorCoroutine == null)
+                {
+                    instantiatorCoroutine = StartCoroutine(PrefabInstantiator());
+                }
+            }
+
+            private IEnumerator PrefabInstantiator()
+            {
+                while (prefabsToInstantiate > 0)
+                {
+                    var instantiated = Instantiate(prefab);
+                    instantiated.SetActive(false);
+                    instantiatedObjects.Enqueue(instantiated);
+
+                    prefabsToInstantiate--;
+                    yield return 0;
+                }
+
+                instantiatorCoroutine = null;
+            }
+
+            public GameObject Get()
+            {
+                GameObject returnVal;
+
+                // If pool is empty
+                if (instantiatedObjects.Count == 0)
+                {
+                    returnVal = Instantiate(prefab);
+
+                    // If prefabsToInstantiate is less than a certain amount, we are fairly confident we should expand the pool
+                    if (prefabsToInstantiate < CHUNK_SIZE / 2)
+                    {
+                        QueueInstantiation(CHUNK_SIZE);
+                    }
+                } else
+                {
+                    returnVal = instantiatedObjects.Dequeue();
+                    QueueInstantiation(1);
+                }
+
+                returnVal.SetActive(prefab.activeSelf);
+                return returnVal;
+            }
+
+            private void QueueInstantiation(int quantity)
+            {
+                prefabsToInstantiate += quantity;
+                StartInstantiator();
+            }
+        }
+
+        private Dictionary<GameObject, GameObjectPool> prefabToPools = new Dictionary<GameObject, GameObjectPool>();
 
         public void Awake()
         {
@@ -35,75 +98,29 @@ namespace UnityTools
 
             foreach (var prefab in initialPrefabs)
             {
-                QueueInstantiation(prefab, CHUNK_SIZE);
+                AddPool(prefab);
             }
-        }
-
-        public void Start()
-        {
-            StartInstantiator();
-        }
-
-        private void StartInstantiator()
-        {
-            if (instantiatorCoroutine == null)
-            {
-                instantiatorCoroutine = StartCoroutine(PrefabInstantiator());
-            }
-        }
-
-        private IEnumerator PrefabInstantiator()
-        {
-            while (prefabsToInstantiate.Count > 0)
-            {
-                var prefab = prefabsToInstantiate.Dequeue();
-                var instantiated = Instantiate(prefab);
-                instantiated.SetActive(false);
-                AddToPool(prefab, instantiated);
-
-                yield return 0;
-            }
-
-            instantiatorCoroutine = null;
         }
 
         public GameObject Get(GameObject prefab)
         {
-            GameObject returnVal;
-
-            // If the prefab isn't in the pool, or the pool has been emptied. Increase the size of the pool
-            if (!prefabToInstantiatedObjects.ContainsKey(prefab) || prefabToInstantiatedObjects[prefab].Count == 0) 
+            if (!prefabToPools.ContainsKey(prefab)) 
             {
-                returnVal = Instantiate(prefab);
-                QueueInstantiation(prefab, CHUNK_SIZE);
-            } else
-            {
-                returnVal = prefabToInstantiatedObjects[prefab].Dequeue();
-                QueueInstantiation(prefab, 1);
+                AddPool(prefab);
             }
 
-            returnVal.SetActive(prefab.activeSelf);
-            return returnVal;
+            return prefabToPools[prefab].Get();
         }
 
-        private void QueueInstantiation(GameObject prefab, int quantity)
+        private void AddPool(GameObject prefab)
         {
-            for (int i = 0; i < quantity; i++)
+            if (!prefabToPools.ContainsKey(prefab))
             {
-                prefabsToInstantiate.Enqueue(prefab);
+                var poolObject = new GameObject(typeof(GameObjectPool).Name);
+                var poolComponent = poolObject.AddComponent<GameObjectPool>();
+                poolComponent.prefab = prefab;
+                prefabToPools.Add(prefab, poolComponent);
             }
-
-            StartInstantiator();
-        }
-
-        private void AddToPool(GameObject prefab, GameObject instantiated)
-        {
-            if (!prefabToInstantiatedObjects.ContainsKey(prefab))
-            {
-                prefabToInstantiatedObjects[prefab] = new Queue<GameObject>();
-            }
-
-            prefabToInstantiatedObjects[prefab].Enqueue(instantiated);
         }
     }
 }
