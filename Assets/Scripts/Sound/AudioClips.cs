@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace UnityTools
 {
@@ -6,7 +9,13 @@ namespace UnityTools
     public class AudioClips : MonoBehaviour
     {
         [SerializeField] private AudioSource audioSource;
-        public AudioClip[] audioClips;
+
+        public AudioClipsDictionary audioClips;
+        public UnityEvent<string> audioClipPlayed;
+
+        // Allow audioClips to display in the inspector
+        [Serializable] public class AudioClipsDictionary : SerializableDictionary<string, AudioClip> { }
+        [CustomPropertyDrawer(typeof(AudioClipsDictionary))] public class AnySerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer { }
 
         // Start is called before the first frame update
         void OnValidate()
@@ -14,9 +23,10 @@ namespace UnityTools
             audioSource = GetComponent<AudioSource>();
         }
 
-        public void PlayClip(int clip)
+        public void PlayClip(string clip)
         {
             audioSource.PlayOneShot(audioClips[clip]);
+            audioClipPlayed.Invoke(clip);
         }
     }
 }
