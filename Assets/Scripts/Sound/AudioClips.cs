@@ -15,7 +15,6 @@ namespace UnityTools
 
         // Allow audioClips to display in the inspector
         [Serializable] public class AudioClipsDictionary : SerializableDictionary<string, AudioClip> { }
-        [CustomPropertyDrawer(typeof(AudioClipsDictionary))] public class AnySerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer { }
 
         // Start is called before the first frame update
         void OnValidate()
