@@ -1,0 +1,17 @@
+{
+    "name": "PropertyDrawer",
+    "references": [
+        "GUID:6ccdffc4881936442877c54bcfb93d32"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
