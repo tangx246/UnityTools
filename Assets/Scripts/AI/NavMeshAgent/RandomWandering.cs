@@ -57,7 +57,7 @@ public class RandomWandering : MonoBehaviour
             return;
         }
 
-        if (Time.time - idleStartTime < wanderIntervalSeconds)
+        if (Time.time - idleStartTime > wanderIntervalSeconds)
         {
             Task.current.Succeed();
         }
