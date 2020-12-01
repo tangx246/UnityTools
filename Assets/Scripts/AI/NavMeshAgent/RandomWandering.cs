@@ -9,6 +9,7 @@ namespace UnityTools
     {
         public float wanderIntervalSeconds = 1f;
         public float wanderRadius = 5f;
+        public float stoppingDistance = 0.5f;
 
         [SerializeField] private NavMeshAgent navMeshAgent;
         private float idleStartTime;
@@ -39,12 +40,12 @@ namespace UnityTools
                 return;
             }
 
-            if (navMeshAgent.remainingDistance == Mathf.Infinity)
+            if (navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid || navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial || navMeshAgent.remainingDistance == Mathf.Infinity)
             {
                 Task.current.Fail();
             }
 
-            if (navMeshAgent.remainingDistance <= 0)
+            if (navMeshAgent.remainingDistance <= stoppingDistance)
             {
                 Task.current.Succeed();
             }
