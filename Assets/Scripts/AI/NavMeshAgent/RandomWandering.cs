@@ -31,6 +31,7 @@ namespace UnityTools
                 NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, 1);
 
                 navMeshAgent.destination = hit.position;
+                navMeshAgent.avoidancePriority = Random.Range(50, 99);
 
                 return;
             }
