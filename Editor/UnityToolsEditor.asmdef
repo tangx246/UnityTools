@@ -1,5 +1,5 @@
 {
-    "name": "PropertyDrawer",
+    "name": "UnityToolsEditor",
     "references": [
         "GUID:6ccdffc4881936442877c54bcfb93d32"
     ],
