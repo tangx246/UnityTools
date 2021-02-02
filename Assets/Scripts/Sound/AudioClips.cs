@@ -17,7 +17,7 @@ namespace UnityTools
         [Serializable] public class AudioClipsDictionary : SerializableDictionary<string, AudioClip> { }
 
         // Start is called before the first frame update
-        void OnValidate()
+        public void Start()
         {
             audioSource = GetComponent<AudioSource>();
         }

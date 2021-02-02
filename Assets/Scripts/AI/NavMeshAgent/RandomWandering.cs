@@ -14,7 +14,7 @@ namespace UnityTools
         [SerializeField] private NavMeshAgent navMeshAgent;
         private float idleStartTime;
 
-        private void OnValidate()
+        public void Start()
         {
             navMeshAgent = GetComponent<NavMeshAgent>();
         }

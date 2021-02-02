@@ -8,7 +8,7 @@ public class NavMeshAgentAnimatorConnector : MonoBehaviour
     public string animatorSpeedVariable = "speed";
     public float speedMultiplier = 1f;
 
-    private void OnValidate()
+    public void OnValidate()
     {
         navMeshAgent = GetComponentInChildren<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
