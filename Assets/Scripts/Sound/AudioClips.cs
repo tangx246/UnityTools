@@ -16,8 +16,7 @@ namespace UnityTools
         // Allow audioClips to display in the inspector
         [Serializable] public class AudioClipsDictionary : SerializableDictionary<string, AudioClip> { }
 
-        // Start is called before the first frame update
-        public void Start()
+        public void Awake()
         {
             audioSource = GetComponent<AudioSource>();
         }
