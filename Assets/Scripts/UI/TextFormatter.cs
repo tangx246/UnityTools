@@ -17,22 +17,28 @@ namespace UnityTools
 
         public void SetText(int arg0)
         {
-            textBox.SetText(string.Format(text, arg0));
+            SetTextHelper(arg0);
         }
 
         public void SetText(int _, int newValue)
         {
-            textBox.SetText(string.Format(text, newValue));
+            SetTextHelper(newValue);
         }
 
         public void SetText(float arg0)
         {
-            textBox.SetText(string.Format(text, arg0));
+            SetTextHelper(arg0);
         }
 
         public void SetText(float _, float newValue)
         {
-            textBox.SetText(string.Format(text, newValue));
+            SetTextHelper(newValue);
+        }
+
+        // Unity Editor does not recognize type object, so we overload public methods
+        private void SetTextHelper(object arg0)
+        {
+            textBox.SetText(string.Format(text, arg0));
         }
     }
 }
