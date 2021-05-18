@@ -19,5 +19,10 @@ namespace UnityTools
         {
             textBox.SetText(string.Format(text, arg0));
         }
+
+        public void SetText(object _, object newValue)
+        {
+            textBox.SetText(string.Format(text, newValue));
+        }
     }
 }
