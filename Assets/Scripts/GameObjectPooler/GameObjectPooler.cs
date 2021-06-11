@@ -18,7 +18,7 @@ namespace UnityTools
 
                 return _instance;
             } }
-        public List<GameObject> initialPrefabs;
+        public List<GameObject> initialPrefabs = new List<GameObject>();
 
         private const int CHUNK_SIZE = 100;
         private class GameObjectPool : MonoBehaviour
