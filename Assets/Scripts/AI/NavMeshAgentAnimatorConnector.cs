@@ -5,8 +5,10 @@ public class NavMeshAgentAnimatorConnector : MonoBehaviour
 {
     public NavMeshAgent navMeshAgent;
     public Animator animator;
-    public string animatorSpeedVariable = "speed";
+    [Tooltip("Hash for this is calculated OnEnable")] public string animatorSpeedVariable = "speed";
     public float speedMultiplier = 1f;
+
+    [SerializeField] private int animatorSpeedVariableHash;
 
     public void Awake()
     {
@@ -14,9 +16,13 @@ public class NavMeshAgentAnimatorConnector : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnEnable()
     {
-        animator.SetFloat(animatorSpeedVariable, navMeshAgent.velocity.magnitude * speedMultiplier);
+        animatorSpeedVariableHash = Animator.StringToHash(animatorSpeedVariable);
+    }
+
+    public void Update()
+    {
+        animator.SetFloat(animatorSpeedVariableHash, navMeshAgent.velocity.magnitude * speedMultiplier);
     }
 }
