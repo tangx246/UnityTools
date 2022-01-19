@@ -1,28 +1,31 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class NavMeshAgentAnimatorConnector : MonoBehaviour
+namespace UnityTools
 {
-    public NavMeshAgent navMeshAgent;
-    public Animator animator;
-    [Tooltip("Hash for this is calculated OnEnable")] public string animatorSpeedVariable = "speed";
-    public float speedMultiplier = 1f;
-
-    [SerializeField] private int animatorSpeedVariableHash;
-
-    public void Awake()
+    public class NavMeshAgentAnimatorConnector : MonoBehaviour
     {
-        navMeshAgent = GetComponentInChildren<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
-    }
+        public NavMeshAgent navMeshAgent;
+        public Animator animator;
+        [Tooltip("Hash for this is calculated OnEnable")] public string animatorSpeedVariable = "speed";
+        public float speedMultiplier = 1f;
 
-    public void OnEnable()
-    {
-        animatorSpeedVariableHash = Animator.StringToHash(animatorSpeedVariable);
-    }
+        [SerializeField] private int animatorSpeedVariableHash;
 
-    public void Update()
-    {
-        animator.SetFloat(animatorSpeedVariableHash, navMeshAgent.velocity.magnitude * speedMultiplier);
+        public void Awake()
+        {
+            navMeshAgent = GetComponentInChildren<NavMeshAgent>();
+            animator = GetComponentInChildren<Animator>();
+        }
+
+        public void OnEnable()
+        {
+            animatorSpeedVariableHash = Animator.StringToHash(animatorSpeedVariable);
+        }
+
+        public void Update()
+        {
+            animator.SetFloat(animatorSpeedVariableHash, navMeshAgent.velocity.magnitude * speedMultiplier);
+        }
     }
 }

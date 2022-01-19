@@ -1,24 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class FloatingText : MonoBehaviour
+namespace UnityTools
 {
-    public Text text;
-    public Vector3 velocity = new Vector3(0, 0.1f, 0);
-
-    public void Start()
+    public class FloatingText : MonoBehaviour
     {
-        text = GetComponentInChildren<Text>();
+        public Text text;
+        public Vector3 velocity = new Vector3(0, 0.1f, 0);
 
-        var camera = Camera.main;
-        if (camera != null)
+        public void Start()
         {
-            transform.LookAt(camera.transform);
-        }
-    }
+            text = GetComponentInChildren<Text>();
 
-    void Update()
-    {
-        transform.position += velocity * Time.deltaTime;
+            var camera = Camera.main;
+            if (camera != null)
+            {
+                transform.LookAt(camera.transform);
+            }
+        }
+
+        void Update()
+        {
+            transform.position += velocity * Time.deltaTime;
+        }
     }
 }
