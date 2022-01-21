@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace UnityTools
 {
@@ -20,74 +20,12 @@ namespace UnityTools
             } }
         public List<GameObject> initialPrefabs = new List<GameObject>();
 
-        private const int CHUNK_SIZE = 100;
-        private class GameObjectPool : MonoBehaviour
+        private class PooledGameObject : MonoBehaviour
         {
-            public GameObject prefab;
-            private Queue<GameObject> instantiatedObjects = new Queue<GameObject>();
-            private int prefabsToInstantiate = CHUNK_SIZE;
-            private Coroutine instantiatorCoroutine;
-
-            public void Start()
-            {
-                StartInstantiator();
-            }
-
-            private void StartInstantiator()
-            {
-                if (instantiatorCoroutine == null)
-                {
-                    instantiatorCoroutine = StartCoroutine(PrefabInstantiator());
-                }
-            }
-
-            private IEnumerator PrefabInstantiator()
-            {
-                while (prefabsToInstantiate > 0)
-                {
-                    var instantiated = Instantiate(prefab, transform);
-                    instantiated.SetActive(false);
-                    instantiatedObjects.Enqueue(instantiated);
-
-                    prefabsToInstantiate--;
-                    yield return 0;
-                }
-
-                instantiatorCoroutine = null;
-            }
-
-            public GameObject Get()
-            {
-                GameObject returnVal;
-
-                // If pool is empty
-                if (instantiatedObjects.Count == 0)
-                {
-                    returnVal = Instantiate(prefab);
-
-                    // If prefabsToInstantiate is less than a certain amount, we are fairly confident we should expand the pool
-                    if (prefabsToInstantiate < CHUNK_SIZE / 2)
-                    {
-                        QueueInstantiation(CHUNK_SIZE);
-                    }
-                } else
-                {
-                    returnVal = instantiatedObjects.Dequeue();
-                    QueueInstantiation(1);
-                }
-
-                returnVal.SetActive(prefab.activeSelf);
-                return returnVal;
-            }
-
-            private void QueueInstantiation(int quantity)
-            {
-                prefabsToInstantiate += quantity;
-                StartInstantiator();
-            }
+            public GameObject originalPrefab;
         }
 
-        private Dictionary<GameObject, GameObjectPool> prefabToPools = new Dictionary<GameObject, GameObjectPool>();
+        private Dictionary<GameObject, ObjectPool<GameObject>> prefabToPools = new Dictionary<GameObject, ObjectPool<GameObject>>();
 
         public void Awake()
         {
@@ -112,16 +50,50 @@ namespace UnityTools
             return prefabToPools[prefab].Get();
         }
 
+        public void Release(GameObject prefabInstance)
+        {
+            var pooledGameObjectComponent = prefabInstance.GetComponent<PooledGameObject>();
+            var prefab = pooledGameObjectComponent.originalPrefab;
+
+            if (!prefabToPools.ContainsKey(prefab))
+            {
+                Debug.LogWarning("Releasing a prefabInstance that doesn't have a pool", prefabInstance);
+                return;
+            }
+
+            prefabToPools[prefab].Release(prefabInstance);
+        }
+
         private void AddPool(GameObject prefab)
         {
             if (!prefabToPools.ContainsKey(prefab))
             {
-                var poolObject = new GameObject(typeof(GameObjectPool).Name);
-                poolObject.transform.parent = instance.transform;
-                var poolComponent = poolObject.AddComponent<GameObjectPool>();
-                poolComponent.prefab = prefab;
-                prefabToPools.Add(prefab, poolComponent);
+                var gameObjectPool = new ObjectPool<GameObject>(() => CreatePooledItem(prefab), OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject);
+                prefabToPools.Add(prefab, gameObjectPool);
             }
+        }
+
+        private GameObject CreatePooledItem(GameObject prefab)
+        {
+            var instantiated = Instantiate(prefab);
+            var pooledGameObjectComponent = instantiated.AddComponent<PooledGameObject>();
+            pooledGameObjectComponent.originalPrefab = prefab;
+            return instantiated;
+        }
+
+        private void OnTakeFromPool(GameObject go)
+        {
+            go.SetActive(true);
+        }
+
+        private void OnDestroyPoolObject(GameObject go)
+        {
+            Destroy(go);
+        }
+
+        private void OnReturnedToPool(GameObject go)
+        {
+            go.SetActive(false);
         }
     }
 }
