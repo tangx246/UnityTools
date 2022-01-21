@@ -23,14 +23,25 @@ namespace UnityTools
         private class PooledGameObject : MonoBehaviour
         {
             public GameObject originalPrefab;
+            private bool released = false;
+
+            public void OnEnable()
+            {
+                released = false;
+            }
 
             public void Release()
             {
-                _instance.Release(gameObject);
+                if (!released) 
+                { 
+                    _instance.prefabToPools[originalPrefab].Release(gameObject);
+                }
+
+                released = true;
             }
         }
 
-        private Dictionary<GameObject, ObjectPool<GameObject>> prefabToPools = new Dictionary<GameObject, ObjectPool<GameObject>>();
+        protected Dictionary<GameObject, ObjectPool<GameObject>> prefabToPools = new Dictionary<GameObject, ObjectPool<GameObject>>();
 
         public void Awake()
         {
@@ -58,15 +69,7 @@ namespace UnityTools
         public void Release(GameObject prefabInstance)
         {
             var pooledGameObjectComponent = prefabInstance.GetComponent<PooledGameObject>();
-            var prefab = pooledGameObjectComponent.originalPrefab;
-
-            if (!prefabToPools.ContainsKey(prefab))
-            {
-                Debug.LogWarning("Releasing a prefabInstance that doesn't have a pool", prefabInstance);
-                return;
-            }
-
-            prefabToPools[prefab].Release(prefabInstance);
+            pooledGameObjectComponent.Release();
         }
 
         private void AddPool(GameObject prefab)
