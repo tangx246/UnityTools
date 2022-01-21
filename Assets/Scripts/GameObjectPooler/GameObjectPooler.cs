@@ -23,6 +23,11 @@ namespace UnityTools
         private class PooledGameObject : MonoBehaviour
         {
             public GameObject originalPrefab;
+
+            public void Release()
+            {
+                _instance.Release(gameObject);
+            }
         }
 
         private Dictionary<GameObject, ObjectPool<GameObject>> prefabToPools = new Dictionary<GameObject, ObjectPool<GameObject>>();
