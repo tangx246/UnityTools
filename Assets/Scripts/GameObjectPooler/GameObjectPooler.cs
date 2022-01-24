@@ -56,14 +56,19 @@ namespace UnityTools
             }
         }
 
-        public GameObject Get(GameObject prefab)
+        public GameObject Get(GameObject prefab, bool activateAutomatically = true)
         {
             if (!prefabToPools.ContainsKey(prefab)) 
             {
                 AddPool(prefab);
             }
 
-            return prefabToPools[prefab].Get();
+            var instance = prefabToPools[prefab].Get();
+            if (activateAutomatically)
+            {
+                instance.SetActive(true);
+            }
+            return instance;
         }
 
         public void Release(GameObject prefabInstance)
@@ -91,7 +96,7 @@ namespace UnityTools
 
         private void OnTakeFromPool(GameObject go)
         {
-            go.SetActive(true);
+            
         }
 
         private void OnDestroyPoolObject(GameObject go)
