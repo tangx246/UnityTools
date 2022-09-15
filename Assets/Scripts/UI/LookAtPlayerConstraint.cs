@@ -10,16 +10,19 @@ namespace UnityTools
         public Vector3 rotationOffset = Vector3.zero;
         private LookAtConstraint lookAtConstraint;
 
-        public void Awake()
+        private void Awake()
         {
             lookAtConstraint = GetComponent<LookAtConstraint>();
         }
 
-        public IEnumerator Start()
+        private void OnEnable()
         {
-            // Look at player
-            lookAtConstraint = GetComponent<LookAtConstraint>();
+            StopAllCoroutines();
+            StartCoroutine(LookForCamera());
+        }
 
+        private IEnumerator LookForCamera()
+        {
             var cameraInitialized = false;
             while (!cameraInitialized)
             {
