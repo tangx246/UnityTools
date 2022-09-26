@@ -7,5 +7,9 @@
     "name": "tangx246",
     "email": "tangx246@umn.edu",
     "url": "https://github.com/tangx246"
+  },
+  "dependencies": {
+    "com.unity.cinemachine": "2.8.9",
+    "com.unity.netcode.gameobjects": "1.0.2"
   }
 }
