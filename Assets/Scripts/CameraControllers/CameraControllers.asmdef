@@ -2,8 +2,8 @@
     "name": "CameraControllers",
     "rootNamespace": "",
     "references": [
-        "Cinemachine",
-        "UnityToolsSO"
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:0c0c3d314696be448aeae4d93277fbb4"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
