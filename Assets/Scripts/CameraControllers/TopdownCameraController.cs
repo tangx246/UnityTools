@@ -4,7 +4,7 @@ using UnityTools;
 
 public class TopdownCameraController : MonoBehaviour
 {
-    public float scrollSpeed = 1f;
+    public float scrollSpeed = 10f;
     public float minZoom = 2.5f;
     public float maxZoom = 7f;
     public Bounds cameraBounds;
