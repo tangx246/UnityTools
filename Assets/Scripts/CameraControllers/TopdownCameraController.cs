@@ -96,6 +96,21 @@ public class TopdownCameraController : MonoBehaviour
 
     public void Zoom(float value)
     {
-        cinemachineVc.m_Lens.OrthographicSize = Mathf.Clamp(cinemachineVc.m_Lens.OrthographicSize - (value / 100), minZoom, maxZoom);
+        if (Camera.main.orthographic)
+        {
+            cinemachineVc.m_Lens.OrthographicSize = GetZoom(cinemachineVc.m_Lens.OrthographicSize, value);
+        } else
+        {
+            var body = cinemachineVc.GetCinemachineComponent<CinemachineFramingTransposer>();
+            if (body != null)
+            {
+                body.m_CameraDistance = GetZoom(body.m_CameraDistance, value);
+            }
+        }
+    }
+
+    private float GetZoom(float currentValue, float delta)
+    {
+        return Mathf.Clamp(currentValue - (delta / 100), minZoom, maxZoom);
     }
 }
