@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public Color dragColor;
+    public Color dragColor = new Color(0f, 1f, 0.15f, 0.1f);
     public DragSelectEvent dragSelectEvent = new();
     public bool enableDragCollideEvents = true;
     public int maxNumDragColliders = 100;
