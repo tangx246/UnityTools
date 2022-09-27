@@ -11,7 +11,7 @@ public class TopdownCameraController : MonoBehaviour
     public GameObjectEventEmitter environmentFocusEvent;
     public EventEmitter<Vector3> cameraCenterEvent;
 
-    private Vector2 moveDirection;
+    [SerializeField] private Vector2 moveDirection;
     private new Camera camera;
     private CinemachineVirtualCamera cinemachineVc;
 
@@ -49,6 +49,12 @@ public class TopdownCameraController : MonoBehaviour
 
     private void Update()
     {
+        if (!Application.isFocused)
+        {
+            Move(Vector2.zero);
+            return;
+        }
+
         if (camera == null)
         {
             camera = Camera.main;
