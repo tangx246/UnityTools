@@ -12,6 +12,7 @@ public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public int maxNumDragColliders = 100;
     public LayerMask colliderMask = ~0;
     public float collideDepth = 1000f;
+    [Tooltip("The z-position of the ground plane. Important for perspective cameras")] public float groundPlaneWorldZ = 0f;
     public DragCollideEvent dragCollideEvent = new();
 
     [SerializeField] private Image dragImage;
@@ -63,14 +64,16 @@ public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if (mousePos.x > anchorPos.x)
         {
             anchorX = 0;
-        } else
+        }
+        else
         {
             anchorX = 1;
         }
         if (mousePos.y > anchorPos.y)
         {
             anchorY = 0;
-        } else
+        }
+        else
         {
             anchorY = 1;
         }
@@ -85,7 +88,19 @@ public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         var camera = Camera.main;
         for (int i = 0; i < screenCorners.Length; i++)
         {
-            screenCorners[i] = camera.ScreenToWorldPoint(screenCorners[i]);
+            // For perspective, we need to consider the camera frustum
+            if (!camera.orthographic)
+            {
+                var plane = new Plane(Vector3.up, groundPlaneWorldZ);
+                var ray = camera.ScreenPointToRay(screenCorners[i]);
+                float z;
+                plane.Raycast(ray, out z);
+                screenCorners[i] = camera.ScreenToWorldPoint(new Vector3(screenCorners[i].x, screenCorners[i].y, z));
+            }
+            else
+            {
+                screenCorners[i] = camera.ScreenToWorldPoint(screenCorners[i]);
+            }
         }
 
         dragSelectEvent.Invoke(screenCorners);
