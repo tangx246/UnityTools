@@ -11,6 +11,7 @@ public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public bool enableDragCollideEvents = true;
     public int maxNumDragColliders = 100;
     public LayerMask colliderMask = ~0;
+    public float collideDepth = 1000f;
     public DragCollideEvent dragCollideEvent = new();
 
     [SerializeField] private Image dragImage;
@@ -106,7 +107,7 @@ public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         Vector3 boxCenter = GetCenter(corners);
         var halfWidth = GetWidth(corners) / 2;
         var halfHeight = GetHeight(corners) / 2;
-        var overlaps = Physics.OverlapBoxNonAlloc(boxCenter, new Vector3(halfWidth, halfHeight, 1000f), results, Camera.main.transform.rotation, colliderMask);
+        var overlaps = Physics.OverlapBoxNonAlloc(boxCenter, new Vector3(halfWidth, halfHeight, collideDepth), results, Camera.main.transform.rotation, colliderMask);
 
         dragCollideEvent.Invoke(results, overlaps);
     }
