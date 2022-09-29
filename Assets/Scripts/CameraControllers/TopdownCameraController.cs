@@ -83,7 +83,9 @@ public class TopdownCameraController : MonoBehaviour
         var terrains = parentWithRenderers.GetComponentsInChildren<Terrain>();
         foreach (var terrain in terrains)
         {
-            bounds.Encapsulate(terrain.terrainData.bounds);
+            var terrainBounds = terrain.terrainData.bounds;
+            terrainBounds.center = terrainBounds.center + terrain.transform.position; // Shift to world position
+            bounds.Encapsulate(terrainBounds);
         }
 
         cameraBounds = bounds;
