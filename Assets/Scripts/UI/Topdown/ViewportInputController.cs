@@ -14,6 +14,11 @@ public class ViewportInputController : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (eventData.dragging)
+        {
+            return;
+        }
+
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             selectEvent.Invoke(eventData.pressPosition);
