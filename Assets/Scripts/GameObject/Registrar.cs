@@ -40,7 +40,7 @@ public static class Registrar<T> where T : Behaviour
         AddListener(listener, action, removeEvent);
     }
 
-    public static IEnumerable<T> GetAll()
+    public static ISet<T> GetAll()
     {
         return items;
     }
