@@ -23,9 +23,17 @@ public static class Registrar<T> where T : Behaviour
         };
     }
 
-    public static void AddRegisterListener(Behaviour listener, UnityAction<T> action)
+    public static void AddRegisterListener(Behaviour listener, UnityAction<T> action, bool callListenerOnExistingItems = true)
     {
         AddListener(listener, action, addEvent);
+
+        if (callListenerOnExistingItems)
+        {
+            foreach (var item in items)
+            {
+                action(item);
+            }
+        }
     }
 
     private static void AddListener(Behaviour listener, UnityAction<T> action, UnityEvent<T> unityEvent)
