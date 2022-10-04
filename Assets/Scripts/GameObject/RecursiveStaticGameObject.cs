@@ -11,7 +11,8 @@ namespace UnityTools
 
         private void RecursiveStatic(GameObject go)
         {
-            go.isStatic = true;
+            if (!go.isStatic)
+                go.isStatic = true;
 
             foreach (Transform child in go.transform)
             {
