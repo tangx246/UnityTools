@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 940270579013473568}
   - component: {fileID: 823401651553870808}
   - component: {fileID: 7902625671809068269}
+  - component: {fileID: 3730276490384658709}
+  - component: {fileID: 5353497571585036515}
   m_Layer: 0
   m_Name: Floating Text
   m_TagString: Untagged
@@ -60,6 +62,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLifeSeconds: 2
+  releaseIntoGameObjectPooler: 0
+--- !u!1183024399 &3730276490384658709
+LookAtConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3469074307575752972}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_Roll: 0
+  m_WorldUpObject: {fileID: 0}
+  m_UseUpObject: 0
+  m_Active: 0
+  m_IsLocked: 0
+  m_Sources: []
+--- !u!114 &5353497571585036515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3469074307575752972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bde242571eb34d1489b3cab9d6d6f54e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &3991375092582324946
 GameObject:
   m_ObjectHideFlags: 0
