@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public Color dragColor = new Color(0f, 1f, 0.15f, 0.1f);
+    public Color dragColor = new(0f, 1f, 0.15f, 0.1f);
     public DragSelectEvent dragSelectEvent = new();
     public bool enableDragCollideEvents = true;
     public int maxNumDragColliders = 100;
@@ -29,7 +29,7 @@ public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         results = new Collider[maxNumDragColliders];
 
         var dragImageParent = new GameObject();
-        dragImageParent.transform.parent = transform;
+        dragImageParent.transform.SetParent(transform, false);
         dragImage = dragImageParent.AddComponent<Image>();
         dragImage.enabled = false;
         dragImage.color = dragColor;
@@ -47,7 +47,7 @@ public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
 
         dragImage.enabled = true;
-        dragImage.rectTransform.anchoredPosition = eventData.position;
+        dragImage.rectTransform.anchoredPosition = eventData.position / dragImage.canvas.scaleFactor;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -57,7 +57,8 @@ public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             return;
         }
 
-        var mousePos = eventData.position;
+        // Account for Canvas Scaler
+        var mousePos = eventData.position / dragImage.canvas.scaleFactor;
         var anchorPos = dragImage.rectTransform.anchoredPosition;
         float anchorX;
         float anchorY;
@@ -93,8 +94,7 @@ public class DragSelector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             {
                 var plane = new Plane(Vector3.up, groundPlaneWorldZ);
                 var ray = camera.ScreenPointToRay(screenCorners[i]);
-                float z;
-                plane.Raycast(ray, out z);
+                plane.Raycast(ray, out float z);
                 screenCorners[i] = camera.ScreenToWorldPoint(new Vector3(screenCorners[i].x, screenCorners[i].y, z));
             }
             else
