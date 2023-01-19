@@ -4,6 +4,7 @@ using UnityTools;
 
 public class TopdownCameraController : MonoBehaviour
 {
+    public bool stopScrollingOnLostAppFocus = true;
     public float scrollSpeed = 10f;
     public float minZoom = 2.5f;
     public float maxZoom = 7f;
@@ -14,6 +15,14 @@ public class TopdownCameraController : MonoBehaviour
     [SerializeField] private Vector2 moveDirection;
     private new Camera camera;
     private CinemachineVirtualCamera cinemachineVc;
+
+    private void OnValidate()
+    {
+        if (transform.parent.GetComponentInChildren<CinemachineVirtualCamera>() == null)
+        {
+            Debug.LogError("Need CinemachineVirtualCamera as a sibling", this);
+        }
+    }
 
     private void Awake()
     {
@@ -49,7 +58,7 @@ public class TopdownCameraController : MonoBehaviour
 
     private void Update()
     {
-        if (!Application.isFocused)
+        if (stopScrollingOnLostAppFocus && !Application.isFocused)
         {
             Move(Vector2.zero);
             return;
@@ -58,6 +67,12 @@ public class TopdownCameraController : MonoBehaviour
         if (camera == null)
         {
             camera = Camera.main;
+
+            if (camera == null)
+            {
+                Debug.LogWarning("Camera.main is null");
+                return;
+            }
         }
 
         var cameraRelativeDirection = camera.transform.rotation * moveDirection;
@@ -89,6 +104,30 @@ public class TopdownCameraController : MonoBehaviour
         }
 
         cameraBounds = bounds;
+    }
+
+    [ContextMenu("Move Up")]
+    private void MoveUp()
+    {
+        Move(Vector2.up);
+    }
+
+    [ContextMenu("Move Down")]
+    private void MoveDown()
+    {
+        Move(Vector2.down);
+    }
+
+    [ContextMenu("Move Left")]
+    private void MoveLeft()
+    {
+        Move(Vector2.left);
+    }
+
+    [ContextMenu("Move Right")]
+    private void MoveRight()
+    {
+        Move(Vector2.right);
     }
 
     public void Move(Vector2 direction)
