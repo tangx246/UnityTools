@@ -8,11 +8,14 @@ public class TopdownCameraController : MonoBehaviour
     public float scrollSpeed = 10f;
     public float minZoom = 2.5f;
     public float maxZoom = 7f;
+    public float cameraTiltDegrees = 35.3f;
+    public float rotationSpeed = 100f;
     public Bounds cameraBounds;
     public GameObjectEventEmitter environmentFocusEvent;
     public EventEmitter<Vector3> cameraCenterEvent;
 
     [SerializeField] private Vector2 moveDirection;
+    [SerializeField] private float rotateDirection;
     private new Camera camera;
     private CinemachineVirtualCamera cinemachineVc;
 
@@ -61,6 +64,7 @@ public class TopdownCameraController : MonoBehaviour
         if (stopScrollingOnLostAppFocus && !Application.isFocused)
         {
             Move(Vector2.zero);
+            Rotate(0f);
             return;
         }
 
@@ -79,6 +83,9 @@ public class TopdownCameraController : MonoBehaviour
         var cameraProjection = Vector3.ProjectOnPlane(cameraRelativeDirection, Vector3.up).normalized;
 
         SetPosition(transform.position + scrollSpeed * Time.unscaledDeltaTime * cameraProjection);
+
+        var cameraRot = new Vector3(cameraTiltDegrees, cinemachineVc.transform.eulerAngles.y + rotationSpeed * rotateDirection * Time.unscaledDeltaTime, 0);
+        cinemachineVc.transform.eulerAngles = cameraRot;
     }
 
     public void SetPosition(Vector3 pos)
@@ -130,9 +137,26 @@ public class TopdownCameraController : MonoBehaviour
         Move(Vector2.right);
     }
 
+    [ContextMenu("Rotate Clockwise")]
+    private void RotateClockwise()
+    {
+        Rotate(1f);
+    }
+
+    [ContextMenu("Rotate Counterclockwise")]
+    private void RotateCounterclockwise()
+    {
+        Rotate(-1f);
+    }
+
     public void Move(Vector2 direction)
     {
         moveDirection = direction.normalized;
+    }
+
+    public void Rotate(float direction)
+    {
+        rotateDirection = Mathf.Clamp(direction, -1, 1);
     }
 
     public void Zoom(float value)
