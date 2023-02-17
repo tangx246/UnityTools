@@ -8,8 +8,6 @@ public class TopdownCameraController : MonoBehaviour
     public float scrollSpeed = 10f;
     public float minZoom = 2.5f;
     public float maxZoom = 7f;
-    public float cameraTiltDegrees = 35.3f;
-    public float rotationSpeed = 100f;
     public Bounds cameraBounds;
     public GameObjectEventEmitter environmentFocusEvent;
     public EventEmitter<Vector3> cameraCenterEvent;
@@ -84,8 +82,8 @@ public class TopdownCameraController : MonoBehaviour
 
         SetPosition(transform.position + scrollSpeed * Time.unscaledDeltaTime * cameraProjection);
 
-        var cameraRot = new Vector3(cameraTiltDegrees, cinemachineVc.transform.eulerAngles.y + rotationSpeed * rotateDirection * Time.unscaledDeltaTime, 0);
-        cinemachineVc.transform.eulerAngles = cameraRot;
+        var pov = cinemachineVc.GetCinemachineComponent<CinemachinePOV>();
+        pov.m_HorizontalAxis.m_InputAxisValue = rotateDirection;
     }
 
     public void SetPosition(Vector3 pos)
