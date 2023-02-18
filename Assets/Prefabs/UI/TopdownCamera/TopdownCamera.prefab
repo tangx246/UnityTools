@@ -32,7 +32,7 @@ Transform:
   - {fileID: 4730375400503164864}
   - {fileID: 4730375400812089881}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4730375400503164865
 GameObject:
@@ -325,8 +325,6 @@ MonoBehaviour:
   scrollSpeed: 10
   minZoom: 2.5
   maxZoom: 7
-  cameraTiltDegrees: 35.3
-  rotationSpeed: 75
   cameraBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
