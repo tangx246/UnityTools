@@ -1,6 +1,6 @@
 {
   "name": "com.tangx246.unitytools",
-  "version": "0.0.65",
+  "version": "0.0.66",
   "displayName": "Unity Tools",
   "description": "A collection of various useful tools for Unity",
   "author": {
@@ -11,6 +11,7 @@
   "dependencies": {
     "com.unity.cinemachine": "2.8.9",
     "com.unity.netcode.gameobjects": "1.0.2",
-    "com.unity.inputsystem": "1.4.2"
+    "com.unity.inputsystem": "1.4.2",
+    "com.unity.nuget.newtonsoft-json": "3.1.0"
   }
 }
