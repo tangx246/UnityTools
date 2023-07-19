@@ -1,0 +1,19 @@
+{
+    "name": "MetahumanEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9bb4dfac31a09ae4bb6368867cf43bfc",
+        "GUID:1491147abca9d7d4bb7105af628b223e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
