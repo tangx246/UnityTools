@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,8 +20,24 @@ namespace UnityTools
             audioSource = GetComponent<AudioSource>();
         }
 
-        public void PlayClip(string clip)
+        public void PlayClip(string clip, bool newObj = false, float newObjTimedDestroy = 10f)
         {
+            AudioSource audioSource;
+            if (newObj)
+            {
+                var soundObj = new GameObject("Sound");
+                soundObj.transform.position = transform.position;
+                audioSource = soundObj.AddComponent<AudioSource>();
+
+                var timedDestroy = soundObj.AddComponent<TimedDestroy>();
+                timedDestroy.enabled = false;
+                timedDestroy.maxLifeSeconds = newObjTimedDestroy;
+                timedDestroy.enabled = true;
+            } else
+            {
+                audioSource = this.audioSource;
+            }
+
             audioSource.PlayOneShot(audioClips[clip]);
             audioClipPlayed.Invoke(clip);
         }
