@@ -14,6 +14,10 @@ public class BootstrapManager : MonoBehaviour
     [Scene]
     public string titleScenePath;
 
+    [Header("Room Mode will allow the server to wait for players to join the game before starting")]
+    public bool roomMode = false;
+    public bool bootstrapGUI = true;
+
     private void Start()
     {
         var networkManager = NetworkManager.Singleton;
@@ -31,15 +35,31 @@ public class BootstrapManager : MonoBehaviour
 
     private void OnServerStarted()
     {
+        if (roomMode)
+        {
+            // Do nothing. We await the host to start the game here
+        } else
+        {
+            StartGameScene();
+        }
+    }
+
+    private void StartGameScene()
+    {
         NetworkManager.Singleton.SceneManager.LoadScene(gameScenePath, LoadSceneMode.Single);
     }
 
     private void OnGUI()
     {
+        if (!bootstrapGUI)
+        {
+            return;
+        }
+
         GUILayout.BeginArea(new Rect(10, 10, 300, 300));
 
         var networkManager = NetworkManager.Singleton;
-
+        // Server not yet started
         if (!networkManager.IsClient && !networkManager.IsServer)
         {
             var transport = ((UnityTransport)networkManager.NetworkConfig.NetworkTransport);
@@ -62,6 +82,14 @@ public class BootstrapManager : MonoBehaviour
             if (GUILayout.Button("Server"))
             {
                 networkManager.StartServer();
+            }
+        } 
+        // Server has started. If Room Mode is enabled, we await further input from the server
+        else if (roomMode && (networkManager.IsHost))
+        {
+            if (GUILayout.Button("Start Game"))
+            {
+                StartGameScene();
             }
         }
 
