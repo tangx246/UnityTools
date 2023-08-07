@@ -24,7 +24,13 @@ public class BootstrapManager : MonoBehaviour
     {
         var networkManager = NetworkManager.Singleton;
         networkManager.OnServerStarted += OnServerStarted;
+        networkManager.OnClientConnectedCallback += OnClientConnected;
         networkManager.OnClientDisconnectCallback += OnClientDisconnected;
+    }
+
+    private void OnClientConnected(ulong id)
+    {
+        Debug.Log($"Client connected with id {id}");
     }
 
     private void OnClientDisconnected(ulong clientId)
