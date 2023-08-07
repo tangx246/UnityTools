@@ -18,6 +18,8 @@ public class BootstrapManager : MonoBehaviour
     public bool roomMode = false;
     public bool bootstrapGUI = true;
 
+    private bool gameStarted = false;
+
     private void Start()
     {
         var networkManager = NetworkManager.Singleton;
@@ -29,6 +31,7 @@ public class BootstrapManager : MonoBehaviour
     {
         if (!NetworkManager.Singleton.IsServer)
         {
+            gameStarted = false;
             SceneManager.LoadScene(titleScenePath, LoadSceneMode.Single);
         }
     }
@@ -47,6 +50,7 @@ public class BootstrapManager : MonoBehaviour
     private void StartGameScene()
     {
         NetworkManager.Singleton.SceneManager.LoadScene(gameScenePath, LoadSceneMode.Single);
+        gameStarted = true;
     }
 
     private void OnGUI()
@@ -85,7 +89,7 @@ public class BootstrapManager : MonoBehaviour
             }
         } 
         // Server has started. If Room Mode is enabled, we await further input from the server
-        else if (roomMode && (networkManager.IsHost))
+        else if (roomMode && networkManager.IsHost && !gameStarted)
         {
             if (GUILayout.Button("Start Game"))
             {
