@@ -9,7 +9,11 @@ namespace UnityTools
     public class LookAtPlayerConstraint : MonoBehaviour
     {
         public Vector3 rotationOffset = Vector3.zero;
+        public bool constantUpdate = true;
+        public float constantUpdateRefreshSeconds = 1f;
+
         private LookAtConstraint lookAtConstraint;
+        private Camera foundCam;
 
         private void Awake()
         {
@@ -19,30 +23,31 @@ namespace UnityTools
         private void OnEnable()
         {
             StopAllCoroutines();
-            StartCoroutine(LookForCamera());
+            StartCoroutine(LookForCameraCoroutine());
         }
 
-        private IEnumerator LookForCamera()
+        private IEnumerator LookForCameraCoroutine()
         {
             var cameraInitialized = false;
-            while (!cameraInitialized)
+            while (!cameraInitialized || constantUpdate)
             {
-                if (Camera.main != null)
+                var mainCamera = Camera.main;
+                if (mainCamera != foundCam)
                 {
+                    foundCam = mainCamera;
                     var constraintSources = new List<ConstraintSource>(1);
                     var constraintSource = new ConstraintSource()
                     {
-                        sourceTransform = Camera.main.transform,
+                        sourceTransform = mainCamera.transform,
                         weight = 1
                     };
                     constraintSources.Add(constraintSource);
                     lookAtConstraint.SetSources(constraintSources);
                     lookAtConstraint.rotationOffset = rotationOffset;
                     lookAtConstraint.constraintActive = true;
-                    cameraInitialized = true;
                 }
 
-                yield return 0;
+                yield return constantUpdate ? new WaitForSeconds(constantUpdateRefreshSeconds) : 0;
             }
         }
     }
