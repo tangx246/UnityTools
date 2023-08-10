@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -28,12 +29,14 @@ namespace UnityTools
             {
                 if (Camera.main != null)
                 {
+                    var constraintSources = new List<ConstraintSource>(1);
                     var constraintSource = new ConstraintSource()
                     {
                         sourceTransform = Camera.main.transform,
                         weight = 1
                     };
-                    lookAtConstraint.AddSource(constraintSource);
+                    constraintSources.Add(constraintSource);
+                    lookAtConstraint.SetSources(constraintSources);
                     lookAtConstraint.rotationOffset = rotationOffset;
                     lookAtConstraint.constraintActive = true;
                     cameraInitialized = true;
