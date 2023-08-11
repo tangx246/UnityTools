@@ -14,6 +14,14 @@ public class AudioSourcePlayerPrefsLink : MonoBehaviour
 
     private AudioSource audioSource;
 
+    private void OnValidate()
+    {
+        if (playerPrefsUpdatedEmitter == null)
+        {
+            Debug.LogWarning($"Player prefs updated emitter for {name} is null", gameObject);
+        }
+    }
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
