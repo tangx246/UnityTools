@@ -25,6 +25,11 @@ namespace UnityTools
             PlayClip(clip, false, 10f);
         }
 
+        public void PlayClipNewObj(string clip)
+        {
+            PlayClip(clip, true, 10f);
+        }
+
         public void PlayClip(string clip, bool newObj = false, float newObjTimedDestroy = 10f)
         {
             AudioSource audioSource;
