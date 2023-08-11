@@ -6,6 +6,7 @@ public class AudioSourcePlayerPrefsLink : MonoBehaviour
 {
     public const string SFX_VOLUME_KEY = "SFXVolume";
     public const string MUSIC_VOLUME_KEY = "MusicVolume";
+    public const string MASTER_VOLUME_KEY = "MasterVolume";
 
     public SoundVolumeType soundVolumeType;
     public float defaultValue = 1f;
@@ -25,7 +26,8 @@ public class AudioSourcePlayerPrefsLink : MonoBehaviour
     private void UpdateVolume()
     {
         string volumeKey = soundVolumeType == SoundVolumeType.SFX ? SFX_VOLUME_KEY : MUSIC_VOLUME_KEY;
-        audioSource.volume = PlayerPrefs.GetFloat(volumeKey, defaultValue);
+        var masterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, 1f);
+        audioSource.volume = PlayerPrefs.GetFloat(volumeKey, defaultValue * masterVolume);
     }
 
     public enum SoundVolumeType 
