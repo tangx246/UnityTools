@@ -46,7 +46,7 @@ public class AudioSourcePlayerPrefsLink : MonoBehaviour
     {
         string volumeKey = GetKey(soundVolumeType);
         var masterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, 1f);
-        audioSource.volume = PlayerPrefs.GetFloat(volumeKey, defaultValue * masterVolume);
+        audioSource.volume = PlayerPrefs.GetFloat(volumeKey, defaultValue) * masterVolume;
     }
 
     public static string GetKey(SoundVolumeType soundVolumeType)
