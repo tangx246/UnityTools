@@ -20,6 +20,11 @@ namespace UnityTools
             audioSource = GetComponent<AudioSource>();
         }
 
+        public void PlayClip(string clip)
+        {
+            PlayClip(clip, false, 10f);
+        }
+
         public void PlayClip(string clip, bool newObj = false, float newObjTimedDestroy = 10f)
         {
             AudioSource audioSource;
