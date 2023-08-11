@@ -27,6 +27,7 @@ public class VolumePlayerPrefsSetter : MonoBehaviour
         if (slider != null && volumeUpdatedEmitter != null)
         {
             volumeUpdatedEmitter.eventEmitter.AddListener(UpdateSlider);
+            UpdateSlider(PlayerPrefs.GetFloat(AudioSourcePlayerPrefsLink.GetKey(soundVolumeType), 1f));
         }
     }
 
