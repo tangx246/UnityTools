@@ -50,7 +50,7 @@ public class AudioSourcePlayerPrefsLink : MonoBehaviour
         audioSource.volume = PlayerPrefs.GetFloat(volumeKey, defaultValue * masterVolume);
     }
 
-    public enum SoundVolumeType 
+    public enum SoundVolumeType
     { 
         SFX,
         Music
