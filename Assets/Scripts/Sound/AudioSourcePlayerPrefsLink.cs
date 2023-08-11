@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityTools;
 
@@ -28,7 +29,18 @@ public class AudioSourcePlayerPrefsLink : MonoBehaviour
         UpdateVolume();
 
         if (playerPrefsUpdatedEmitter != null)
-            playerPrefsUpdatedEmitter.eventEmitter.AddListener((_) => UpdateVolume());
+            playerPrefsUpdatedEmitter.eventEmitter.AddListener(UpdateVolume);
+    }
+
+    private void UpdateVolume(float _)
+    {
+        UpdateVolume();
+    }
+
+    private void OnDestroy()
+    {
+        if (playerPrefsUpdatedEmitter != null)
+            playerPrefsUpdatedEmitter.eventEmitter.RemoveListener(UpdateVolume);
     }
 
     private void UpdateVolume()
