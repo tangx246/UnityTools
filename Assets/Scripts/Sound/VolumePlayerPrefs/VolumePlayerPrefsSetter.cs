@@ -12,7 +12,7 @@ public class VolumePlayerPrefsSetter : MonoBehaviour
     {
         if (volumeUpdatedEmitter == null)
         {
-            Debug.LogWarning($"Volume updated emitter for {name} is null", gameObject);
+            Debug.LogWarning($"Volume updated emitter for {name} is null. One is provided by this library", gameObject);
         }
     }
 
